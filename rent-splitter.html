@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rent Payment Split - Ethereum</title>
     
+    <!-- Ethers.js for proper ABI encoding -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+    
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +28,6 @@
             --text-muted: #64748b;
             --border-color: #2d2d3a;
             --gradient-1: linear-gradient(135deg, #6366f1 0%, #22d3ee 100%);
-            --gradient-2: linear-gradient(135deg, #0a0a0f 0%, #1a1a25 100%);
         }
 
         * {
@@ -43,7 +45,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated background */
         .bg-grid {
             position: fixed;
             top: 0;
@@ -96,7 +97,6 @@
             z-index: 1;
         }
 
-        /* Header */
         header {
             text-align: center;
             margin-bottom: 50px;
@@ -121,7 +121,6 @@
             text-transform: uppercase;
         }
 
-        /* Wallet Connection */
         .wallet-section {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -173,12 +172,13 @@
             border-radius: 20px;
             font-size: 0.75rem;
             color: var(--accent-success);
+            margin-right: 10px;
         }
 
         .network-badge.wrong {
-            background: rgba(239, 68, 68, 0.1);
-            border-color: var(--accent-danger);
-            color: var(--accent-danger);
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--accent-warning);
+            color: var(--accent-warning);
         }
 
         .network-dot {
@@ -224,17 +224,12 @@
             border: 1px solid var(--border-color);
         }
 
-        .btn-secondary:hover {
-            border-color: var(--accent-primary);
-        }
-
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* Main Card */
         .main-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -275,7 +270,6 @@
             font-size: 1.2rem;
         }
 
-        /* Form Elements */
         .form-group {
             margin-bottom: 25px;
         }
@@ -316,8 +310,12 @@
             gap: 15px;
         }
 
-        .input-group .form-input {
-            flex: 1;
+        .input-with-suffix {
+            display: flex;
+        }
+
+        .input-with-suffix .form-input {
+            border-radius: 12px 0 0 12px;
         }
 
         .input-suffix {
@@ -332,15 +330,6 @@
             font-size: 0.9rem;
         }
 
-        .input-with-suffix {
-            display: flex;
-        }
-
-        .input-with-suffix .form-input {
-            border-radius: 12px 0 0 12px;
-        }
-
-        /* Owner Cards */
         .owners-container {
             display: flex;
             flex-direction: column;
@@ -436,7 +425,6 @@
             color: var(--accent-primary);
         }
 
-        /* Summary */
         .summary-card {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(34, 211, 238, 0.1) 100%);
             border: 1px solid var(--accent-primary);
@@ -476,7 +464,6 @@
             color: var(--accent-secondary);
         }
 
-        /* Percentage Validation */
         .percentage-status {
             display: flex;
             align-items: center;
@@ -499,7 +486,6 @@
             color: var(--accent-danger);
         }
 
-        /* Transaction Status */
         .tx-status {
             padding: 25px;
             border-radius: 16px;
@@ -551,13 +537,13 @@
             border-top-color: currentColor;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            display: inline-block;
         }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* Contract Info */
         .contract-info {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -582,25 +568,8 @@
             font-size: 0.85rem;
             word-break: break-all;
             margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
         }
 
-        .copy-btn {
-            padding: 8px 16px;
-            background: var(--accent-primary);
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.8rem;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        /* Footer */
         footer {
             text-align: center;
             padding: 40px 20px;
@@ -613,7 +582,6 @@
             text-decoration: none;
         }
 
-        /* Warning Banner */
         .warning-banner {
             background: rgba(245, 158, 11, 0.1);
             border: 1px solid var(--accent-warning);
@@ -640,32 +608,33 @@
             color: var(--accent-warning);
         }
 
-        /* Responsive */
+        .debug-info {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            display: none;
+        }
+
+        .debug-info.show {
+            display: block;
+        }
+
+        .debug-info pre {
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
         @media (max-width: 600px) {
-            .container {
-                padding: 20px 15px;
-            }
-
-            .logo {
-                font-size: 2rem;
-            }
-
-            .main-card {
-                padding: 25px 20px;
-            }
-
-            .wallet-section {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .wallet-info {
-                flex-direction: column;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
+            .container { padding: 20px 15px; }
+            .logo { font-size: 2rem; }
+            .main-card { padding: 25px 20px; }
+            .wallet-section { flex-direction: column; text-align: center; }
+            .wallet-info { flex-direction: column; }
+            .input-group { flex-direction: column; }
         }
     </style>
 </head>
@@ -680,7 +649,6 @@
             <p class="tagline">Ethereum Rent Payment • Multi-Owner Distribution</p>
         </header>
 
-        <!-- Wallet Connection Section -->
         <div class="wallet-section" id="walletSection">
             <div class="wallet-info">
                 <div class="wallet-icon">🦊</div>
@@ -689,7 +657,7 @@
                     <p class="wallet-address" id="walletAddress">Connect MetaMask to continue</p>
                 </div>
             </div>
-            <div>
+            <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 10px;">
                 <div class="network-badge" id="networkBadge" style="display: none;">
                     <span class="network-dot"></span>
                     <span id="networkName">Ethereum Mainnet</span>
@@ -700,23 +668,20 @@
             </div>
         </div>
 
-        <!-- Warning Banner -->
         <div class="warning-banner">
             <span class="warning-icon">⚠️</span>
             <div class="warning-text">
-                <strong>Real Transaction Warning:</strong> This interface executes real Ethereum transactions on the mainnet. 
+                <strong>Real Transaction Warning:</strong> This interface executes real Ethereum transactions. 
                 You will be spending real ETH. Double-check all wallet addresses and amounts before confirming. 
                 Transactions are irreversible.
             </div>
         </div>
 
-        <!-- Main Form -->
         <div class="main-card">
             <h2 class="section-title">
                 <span>💰</span> Payment Details
             </h2>
 
-            <!-- Rent Amount -->
             <div class="form-group">
                 <label class="form-label">Total Rent Amount</label>
                 <div class="input-with-suffix">
@@ -731,15 +696,12 @@
                 <span>👥</span> Property Owners
             </h2>
 
-            <!-- Percentage Status -->
             <div class="percentage-status invalid" id="percentageStatus">
                 <span>❌</span>
                 <span id="percentageText">Total: 0% (must equal 100%)</span>
             </div>
 
-            <!-- Owners Container -->
             <div class="owners-container" id="ownersContainer">
-                <!-- Owner 1 -->
                 <div class="owner-card" data-owner="1">
                     <div class="owner-header">
                         <div class="owner-number">
@@ -767,7 +729,6 @@
                     </div>
                 </div>
 
-                <!-- Owner 2 -->
                 <div class="owner-card" data-owner="2">
                     <div class="owner-header">
                         <div class="owner-number">
@@ -797,12 +758,10 @@
                 </div>
             </div>
 
-            <!-- Add Owner Button -->
             <button class="add-owner-btn" onclick="addOwner()">
                 <span>+</span> Add Another Owner
             </button>
 
-            <!-- Summary -->
             <div class="summary-card">
                 <h3 class="summary-title">📊 Transaction Summary</h3>
                 <div class="summary-row">
@@ -819,17 +778,15 @@
                 </div>
                 <div class="summary-row">
                     <span class="summary-label">Gas Fee (estimated)</span>
-                    <span class="summary-value highlight" id="summaryGas">~0.001 ETH</span>
+                    <span class="summary-value highlight" id="summaryGas">~0.002 ETH</span>
                 </div>
             </div>
 
-            <!-- Pay Button -->
             <button class="btn btn-primary" id="payBtn" onclick="executePayment()" 
                     style="width: 100%; padding: 18px; font-size: 1.1rem;" disabled>
                 <span>🚀</span> Pay Rent Now
             </button>
 
-            <!-- Transaction Status -->
             <div class="tx-status" id="txStatus">
                 <h4 id="txTitle">
                     <span class="spinner"></span>
@@ -837,18 +794,23 @@
                 </h4>
                 <p id="txMessage"></p>
             </div>
+
+            <div class="debug-info" id="debugInfo">
+                <strong>Debug Information:</strong>
+                <pre id="debugText"></pre>
+            </div>
         </div>
 
-        <!-- Contract Info -->
         <div class="contract-info">
             <h3>📝 Smart Contract</h3>
             <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.9rem;">
-                After deploying your contract, enter its address here:
+                Enter your deployed contract address:
             </p>
             <div class="contract-address">
                 <input type="text" id="contractAddress" class="form-input" 
-                       placeholder="Enter deployed contract address (0x...)" 
-                       style="background: transparent; border: none; padding: 0; font-size: 0.85rem;">
+                       placeholder="0x..." 
+                       style="background: transparent; border: none; padding: 0; font-size: 0.9rem;"
+                       oninput="updatePayButton()">
             </div>
             <p style="color: var(--text-muted); font-size: 0.8rem;">
                 ⚡ The contract will split payments automatically based on ownership percentages.
@@ -856,7 +818,7 @@
         </div>
 
         <footer>
-            <p>Built for Ethereum Mainnet • Always verify addresses before sending</p>
+            <p>Built for Ethereum • Always verify addresses before sending</p>
             <p style="margin-top: 10px;">
                 <a href="https://etherscan.io" target="_blank">View on Etherscan</a>
             </p>
@@ -864,7 +826,7 @@
     </div>
 
     <script>
-        // Contract ABI - Only the functions we need
+        // Contract ABI
         const CONTRACT_ABI = [
             {
                 "inputs": [
@@ -889,192 +851,145 @@
             }
         ];
 
-        let web3;
+        let provider;
+        let signer;
         let userAccount;
-        let ownerCount = 2;
+        let currentChainId;
 
-        // Network names
         const NETWORKS = {
             1: 'Ethereum Mainnet',
             5: 'Goerli Testnet',
             11155111: 'Sepolia Testnet',
             137: 'Polygon Mainnet',
-            80001: 'Mumbai Testnet',
             42161: 'Arbitrum One',
             10: 'Optimism'
         };
 
-        // Connect to MetaMask
+        // Connect wallet
         async function connectWallet() {
-            // Better MetaMask detection
-            const ethereum = window.ethereum;
-            
-            if (typeof ethereum === 'undefined') {
-                // Check if file is opened locally
+            if (typeof window.ethereum === 'undefined') {
                 if (window.location.protocol === 'file:') {
-                    alert('⚠️ LOCAL FILE DETECTED\n\nMetaMask cannot connect to local files (file://).\n\nSOLUTION: Use a simple local server.\n\n1. Open this folder in terminal/command prompt\n2. Run: python -m http.server 8000\n3. Open: http://localhost:8000/rent-payment-interface.html\n\nOr drag this file to https://htmlpreview.github.io');
+                    alert('⚠️ LOCAL FILE DETECTED\n\nMetaMask cannot connect to files opened directly.\n\nPlease host this file on GitHub Pages.\nSee the guide for instructions.');
                     return;
                 }
-                alert('Please install MetaMask to use this application!\n\nVisit https://metamask.io to download.');
+                alert('Please install MetaMask!\n\nVisit https://metamask.io');
                 return;
             }
 
             try {
-                // Request account access
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts' 
-                });
-                
+                provider = new ethers.BrowserProvider(window.ethereum);
+                const accounts = await provider.send("eth_requestAccounts", []);
                 userAccount = accounts[0];
+                signer = await provider.getSigner();
                 
-                // Get network
-                const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-                const networkId = parseInt(chainId, 16);
+                const network = await provider.getNetwork();
+                currentChainId = Number(network.chainId);
                 
-                updateWalletUI(networkId);
+                updateWalletUI();
                 
-                // Listen for account changes
-                window.ethereum.on('accountsChanged', (accounts) => {
+                window.ethereum.on('accountsChanged', async (accounts) => {
                     if (accounts.length === 0) {
-                        disconnectWallet();
+                        location.reload();
                     } else {
                         userAccount = accounts[0];
-                        updateWalletUI(networkId);
+                        signer = await provider.getSigner();
+                        updateWalletUI();
                     }
                 });
                 
-                // Listen for network changes
-                window.ethereum.on('chainChanged', () => {
-                    window.location.reload();
-                });
+                window.ethereum.on('chainChanged', () => location.reload());
                 
             } catch (error) {
                 console.error('Connection failed:', error);
-                alert('Failed to connect wallet: ' + error.message);
+                alert('Failed to connect: ' + error.message);
             }
         }
 
-        function updateWalletUI(networkId) {
-            const walletStatus = document.getElementById('walletStatus');
-            const walletAddress = document.getElementById('walletAddress');
-            const connectBtn = document.getElementById('connectBtn');
-            const networkBadge = document.getElementById('networkBadge');
-            const networkName = document.getElementById('networkName');
-            const summaryNetwork = document.getElementById('summaryNetwork');
+        function updateWalletUI() {
+            document.getElementById('walletStatus').textContent = 'Connected';
+            document.getElementById('walletAddress').textContent = 
+                `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
             
-            // Update wallet display
-            walletStatus.textContent = 'Wallet Connected';
-            walletAddress.textContent = `${userAccount.slice(0, 6)}...${userAccount.slice(-4)}`;
+            const btn = document.getElementById('connectBtn');
+            btn.innerHTML = '<span>✓</span> Connected';
+            btn.disabled = true;
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-secondary');
             
-            // Update button
-            connectBtn.textContent = 'Connected ✓';
-            connectBtn.disabled = true;
-            connectBtn.classList.remove('btn-primary');
-            connectBtn.classList.add('btn-secondary');
+            const netName = NETWORKS[currentChainId] || `Chain ${currentChainId}`;
+            document.getElementById('networkName').textContent = netName;
+            document.getElementById('summaryNetwork').textContent = netName;
+            document.getElementById('networkBadge').style.display = 'inline-flex';
             
-            // Update network badge
-            const netName = NETWORKS[networkId] || `Chain ${networkId}`;
-            networkName.textContent = netName;
-            summaryNetwork.textContent = netName;
-            networkBadge.style.display = 'inline-flex';
-            
-            // Highlight if not mainnet
-            if (networkId !== 1) {
-                networkBadge.classList.add('wrong');
-            } else {
-                networkBadge.classList.remove('wrong');
+            if (currentChainId !== 1) {
+                document.getElementById('networkBadge').classList.add('wrong');
             }
             
             updatePayButton();
         }
 
-        function disconnectWallet() {
-            userAccount = null;
-            document.getElementById('walletStatus').textContent = 'Connect Your Wallet';
-            document.getElementById('walletAddress').textContent = 'Connect MetaMask to continue';
-            document.getElementById('connectBtn').textContent = '🔗 Connect Wallet';
-            document.getElementById('connectBtn').disabled = false;
-            document.getElementById('networkBadge').style.display = 'none';
-            document.getElementById('summaryNetwork').textContent = '--';
-            updatePayButton();
-        }
-
-        // Owner Management
         function addOwner() {
-            ownerCount++;
             const container = document.getElementById('ownersContainer');
+            const count = container.children.length + 1;
             
-            const ownerCard = document.createElement('div');
-            ownerCard.className = 'owner-card';
-            ownerCard.dataset.owner = ownerCount;
-            
-            ownerCard.innerHTML = `
+            const card = document.createElement('div');
+            card.className = 'owner-card';
+            card.dataset.owner = count;
+            card.innerHTML = `
                 <div class="owner-header">
                     <div class="owner-number">
-                        <span class="owner-badge">${ownerCount}</span>
-                        Owner #${ownerCount}
+                        <span class="owner-badge">${count}</span>
+                        Owner #${count}
                     </div>
                     <button class="remove-owner" onclick="removeOwner(this)">×</button>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Wallet Address</label>
-                    <input type="text" class="form-input owner-address" 
-                           placeholder="0x..." oninput="updateSummary()">
+                    <input type="text" class="form-input owner-address" placeholder="0x..." oninput="updateSummary()">
                 </div>
                 <div class="input-group">
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">Ownership %</label>
-                        <input type="number" class="form-input owner-percentage" 
-                               placeholder="0" min="1" max="99" 
-                               oninput="updatePercentages()">
+                        <input type="number" class="form-input owner-percentage" placeholder="0" min="1" max="99" oninput="updatePercentages()">
                     </div>
                     <div class="form-group" style="flex: 1;">
                         <label class="form-label">Payment Amount</label>
-                        <input type="text" class="form-input owner-amount" 
-                               placeholder="0 ETH" readonly>
+                        <input type="text" class="form-input owner-amount" placeholder="0 ETH" readonly>
                     </div>
                 </div>
             `;
-            
-            container.appendChild(ownerCard);
+            container.appendChild(card);
             updateOwnerNumbers();
             updateSummary();
         }
 
         function removeOwner(btn) {
-            const card = btn.closest('.owner-card');
             if (document.querySelectorAll('.owner-card').length > 2) {
-                card.remove();
+                btn.closest('.owner-card').remove();
                 updateOwnerNumbers();
                 updatePercentages();
             }
         }
 
         function updateOwnerNumbers() {
-            const cards = document.querySelectorAll('.owner-card');
-            cards.forEach((card, index) => {
-                const num = index + 1;
+            document.querySelectorAll('.owner-card').forEach((card, i) => {
+                const num = i + 1;
                 card.dataset.owner = num;
                 card.querySelector('.owner-badge').textContent = num;
-                card.querySelector('.owner-number').innerHTML = `
-                    <span class="owner-badge">${num}</span>
-                    Owner #${num}
-                `;
-                // Show remove button for all but first two
+                const header = card.querySelector('.owner-number');
+                header.innerHTML = `<span class="owner-badge">${num}</span> Owner #${num}`;
+                
                 const removeBtn = card.querySelector('.remove-owner');
                 if (removeBtn) {
-                    removeBtn.style.display = cards.length > 2 ? 'flex' : 'none';
+                    removeBtn.style.display = document.querySelectorAll('.owner-card').length > 2 ? 'flex' : 'none';
                 }
             });
-            document.getElementById('summaryOwners').textContent = cards.length;
+            document.getElementById('summaryOwners').textContent = document.querySelectorAll('.owner-card').length;
         }
 
-        // Update calculations
         function updatePercentages() {
-            const percentInputs = document.querySelectorAll('.owner-percentage');
             let total = 0;
-            
-            percentInputs.forEach(input => {
+            document.querySelectorAll('.owner-percentage').forEach(input => {
                 total += parseFloat(input.value) || 0;
             });
             
@@ -1094,172 +1009,129 @@
         }
 
         function updateSummary() {
-            const rentAmount = parseFloat(document.getElementById('rentAmount').value) || 0;
-            document.getElementById('summaryTotal').textContent = `${rentAmount} ETH`;
+            const rent = parseFloat(document.getElementById('rentAmount').value) || 0;
+            document.getElementById('summaryTotal').textContent = `${rent} ETH`;
             
-            // Update individual amounts
-            const cards = document.querySelectorAll('.owner-card');
-            cards.forEach(card => {
-                const percentage = parseFloat(card.querySelector('.owner-percentage').value) || 0;
-                const amount = (rentAmount * percentage / 100).toFixed(6);
-                card.querySelector('.owner-amount').value = `${amount} ETH`;
+            document.querySelectorAll('.owner-card').forEach(card => {
+                const pct = parseFloat(card.querySelector('.owner-percentage').value) || 0;
+                card.querySelector('.owner-amount').value = `${(rent * pct / 100).toFixed(6)} ETH`;
             });
             
             updatePayButton();
         }
 
         function updatePayButton() {
-            const btn = document.getElementById('payBtn');
-            const rentAmount = parseFloat(document.getElementById('rentAmount').value) || 0;
-            const contractAddress = document.getElementById('contractAddress').value.trim();
+            const rent = parseFloat(document.getElementById('rentAmount').value) || 0;
+            const contract = document.getElementById('contractAddress').value.trim();
             
-            // Get all percentages
-            const percentInputs = document.querySelectorAll('.owner-percentage');
-            let totalPercent = 0;
-            percentInputs.forEach(input => {
-                totalPercent += parseFloat(input.value) || 0;
+            let totalPct = 0;
+            document.querySelectorAll('.owner-percentage').forEach(i => totalPct += parseFloat(i.value) || 0);
+            
+            let validAddresses = true;
+            document.querySelectorAll('.owner-address').forEach(a => {
+                if (!/^0x[a-fA-F0-9]{40}$/.test(a.value)) validAddresses = false;
             });
             
-            // Get all addresses
-            const addresses = document.querySelectorAll('.owner-address');
-            let allAddressesValid = true;
-            addresses.forEach(addr => {
-                if (!addr.value.match(/^0x[a-fA-F0-9]{40}$/)) {
-                    allAddressesValid = false;
-                }
-            });
-            
-            const canPay = userAccount && 
-                           rentAmount > 0 && 
-                           totalPercent === 100 && 
-                           allAddressesValid &&
-                           contractAddress.match(/^0x[a-fA-F0-9]{40}$/);
-            
-            btn.disabled = !canPay;
+            document.getElementById('payBtn').disabled = !(
+                userAccount && 
+                signer && 
+                rent > 0 && 
+                totalPct === 100 && 
+                validAddresses && 
+                /^0x[a-fA-F0-9]{40}$/.test(contract)
+            );
         }
 
-        // Execute Payment
         async function executePayment() {
             const txStatus = document.getElementById('txStatus');
             const txTitle = document.getElementById('txTitle');
             const txMessage = document.getElementById('txMessage');
+            const debugInfo = document.getElementById('debugInfo');
+            const debugText = document.getElementById('debugText');
             
             try {
-                // Show pending status
                 txStatus.className = 'tx-status pending';
-                txTitle.innerHTML = '<span class="spinner"></span> Processing Transaction...';
-                txMessage.textContent = 'Please confirm the transaction in MetaMask';
+                txTitle.innerHTML = '<span class="spinner"></span> Preparing Transaction...';
+                txMessage.textContent = 'Please confirm in MetaMask';
+                debugInfo.classList.remove('show');
                 
                 const contractAddress = document.getElementById('contractAddress').value.trim();
                 const rentAmount = document.getElementById('rentAmount').value;
                 
-                // Collect owners and percentages
                 const owners = [];
                 const percentages = [];
                 
                 document.querySelectorAll('.owner-card').forEach(card => {
-                    const address = card.querySelector('.owner-address').value.trim();
-                    const percentage = parseFloat(card.querySelector('.owner-percentage').value);
-                    owners.push(address);
-                    percentages.push(Math.round(percentage * 100)); // Convert to basis points
+                    owners.push(card.querySelector('.owner-address').value.trim());
+                    percentages.push(Math.round(parseFloat(card.querySelector('.owner-percentage').value) * 100));
                 });
                 
-                // Convert ETH to Wei (multiply by 10^18)
-                const weiValue = BigInt(Math.floor(parseFloat(rentAmount) * 1e18));
+                // Debug
+                const debug = { contractAddress, rentAmount, owners, percentages, total: percentages.reduce((a,b) => a+b, 0) };
+                console.log('TX Data:', debug);
+                debugText.textContent = JSON.stringify(debug, null, 2);
                 
-                // Encode function call
-                const functionSignature = 'payRent(address[],uint256[])';
-                const functionSelector = await getFunctionSelector(functionSignature);
+                // Create contract
+                const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+                const value = ethers.parseEther(rentAmount);
                 
-                // Encode parameters
-                const encodedParams = encodePayRentParams(owners, percentages);
-                const data = functionSelector + encodedParams;
+                console.log('Calling payRent...');
+                const tx = await contract.payRent(owners, percentages, { value });
                 
-                // Send transaction
-                const txHash = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [{
-                        from: userAccount,
-                        to: contractAddress,
-                        value: '0x' + weiValue.toString(16),
-                        data: data
-                    }]
-                });
+                txTitle.innerHTML = '<span class="spinner"></span> Confirming...';
+                txMessage.innerHTML = `TX: <a href="https://etherscan.io/tx/${tx.hash}" target="_blank" class="tx-link">${tx.hash.slice(0,20)}...</a>`;
                 
-                // Show success
+                const receipt = await tx.wait();
+                
                 txStatus.className = 'tx-status success';
-                txTitle.innerHTML = '✅ Transaction Submitted!';
+                txTitle.innerHTML = '✅ Success!';
                 txMessage.innerHTML = `
-                    Transaction Hash:<br>
-                    <a href="https://etherscan.io/tx/${txHash}" target="_blank" class="tx-link">${txHash}</a>
-                    <br><br>
-                    Your rent payment is being processed on the blockchain.
+                    Rent payment completed!<br><br>
+                    <a href="https://etherscan.io/tx/${tx.hash}" target="_blank" class="tx-link">${tx.hash}</a><br><br>
+                    Block: ${receipt.blockNumber}
                 `;
                 
             } catch (error) {
-                console.error('Transaction failed:', error);
+                console.error('TX Failed:', error);
+                debugInfo.classList.add('show');
+                debugText.textContent += '\n\nError: ' + error.message;
+                
                 txStatus.className = 'tx-status error';
-                txTitle.innerHTML = '❌ Transaction Failed';
-                txMessage.textContent = error.message || 'Unknown error occurred';
+                txTitle.innerHTML = '❌ Failed';
+                
+                let msg = error.message;
+                if (msg.includes('user rejected')) msg = 'Transaction rejected in MetaMask';
+                else if (msg.includes('insufficient funds')) msg = 'Not enough ETH for transaction + gas';
+                else if (msg.includes('execution reverted')) msg = 'Contract error. Check addresses and percentages.';
+                
+                txMessage.textContent = msg;
             }
         }
 
-        // Helper: Get function selector (first 4 bytes of keccak256 hash)
-        async function getFunctionSelector(signature) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(signature);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            
-            // For Ethereum, we need keccak256, not SHA-256
-            // We'll use a simplified approach since we know the signature
-            // payRent(address[],uint256[]) = 0x9a47a9cd
-            return '0x9a47a9cd';
-        }
-
-        // Helper: Encode parameters for payRent function
-        function encodePayRentParams(owners, percentages) {
-            // ABI encoding for dynamic arrays
-            // Offset for owners array (64 bytes = 0x40)
-            // Offset for percentages array
-            
-            let encoded = '';
-            
-            // Offset to owners array (0x40 = 64 in decimal, 2 * 32 bytes)
-            encoded += '0000000000000000000000000000000000000000000000000000000000000040';
-            
-            // Offset to percentages array
-            const ownersArrayLength = 32 + (owners.length * 32); // length + addresses
-            const percentagesOffset = 64 + ownersArrayLength;
-            encoded += percentagesOffset.toString(16).padStart(64, '0');
-            
-            // Owners array
-            encoded += owners.length.toString(16).padStart(64, '0');
-            owners.forEach(addr => {
-                encoded += addr.slice(2).toLowerCase().padStart(64, '0');
-            });
-            
-            // Percentages array
-            encoded += percentages.length.toString(16).padStart(64, '0');
-            percentages.forEach(pct => {
-                encoded += pct.toString(16).padStart(64, '0');
-            });
-            
-            return encoded;
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if MetaMask is connected
-            if (window.ethereum && window.ethereum.selectedAddress) {
-                userAccount = window.ethereum.selectedAddress;
-                window.ethereum.request({ method: 'eth_chainId' })
-                    .then(chainId => updateWalletUI(parseInt(chainId, 16)));
+        // Init
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof ethers === 'undefined') {
+                alert('Error loading ethers.js. Please refresh.');
+                return;
             }
+            console.log('Ethers:', ethers.version);
             
-            // Add input listeners for contract address
-            document.getElementById('contractAddress').addEventListener('input', updatePayButton);
-            document.getElementById('rentAmount').addEventListener('input', updatePayButton);
+            if (window.ethereum?.selectedAddress) {
+                try {
+                    provider = new ethers.BrowserProvider(window.ethereum);
+                    const accts = await provider.listAccounts();
+                    if (accts.length > 0) {
+                        userAccount = accts[0].address;
+                        signer = await provider.getSigner();
+                        const net = await provider.getNetwork();
+                        currentChainId = Number(net.chainId);
+                        updateWalletUI();
+                    }
+                } catch(e) { console.log('Auto-connect failed:', e); }
+            }
         });
     </script>
 </body>
 </html>
+
+
